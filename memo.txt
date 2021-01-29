@@ -1,0 +1,99 @@
+終了
+Space q q
+再起動
+Space q r
+デバッグモードで再起動
+Space q d
+
+Ctrl-h でバックスペースにする　　.emacs.dの init.elに以下を追加
+(keyboard-translate ?\C-h ?\C-?)
+
+ウィンドウの大きさ変更 .spacemacsに以下を追加
+(add-to-list 'default-frame-alist '(height . 60))
+(add-to-list 'default-frame-alist '(width . 220)) 
+
+
+
+■HELP Space h
+Space h k Keyを調べる
+Space ?  キーバインドを調べる
+Space h d 調べる系
+Space h d b キーバインドを調べるSpace？と同じかな
+Space h d f 関数を調べる
+Space h d m 現在のバッファで有効になっているモードと使えるキーバインドを調べる
+Space h d p パッケージを調べる
+Space h d s システム情報をクリップボードにコピー(messageバッファで確認できる)
+Space h d v 変数を調べる
+
+■ウィンドウ操作 Space w
+Space w TAB		別のウィンドウを移動
+Space w 2,3		縦に{2,3}分割
+Space w f		follow-modeの切り替え
+Space w b		ミニバッファに移動
+Space w d		ウィンドウを消去
+Space w h,j,k,l		上下左右に移動
+Space w W		移動するウィンドウを選択
+Space w D		消去するウィンドウを選択
+Space w M		スワップするウィンドウを選択
+Space 数字 Windowの移動
+
+■バッファ操作 Space b
+Space b .		バッファ移動ステート
+Space b b		バッファを選択
+Space b s		*scratch*バッファ
+Space b d		バッファを削除
+Space b h		Spacemacsのホーム画面
+
+■ファイル操作 Space f
+Space f f		ファイルを開く
+Space f r		最近使ったファイルを開く
+Space f j		ディレクトリを開く
+Space f J		仮ファイルを開く
+
+■Spacemacsの設定 Space f e
+Space f e		Spacemacsレイヤーの操作
+Space f e d		~/.spacemacsを開く
+Space f e i		~/.emacs.d/init.elを開く
+Space f e R		設定ファイルを再読込み
+
+■Git操作 Space g
+Space g s   Magitを起動
+
+ディレクトリツリーを表示
+Space f t
+f file
+t tree
+
+h  上の階層に移動
+l　下の階層に移動
+s  隠しファイル表示
+
+
+ディレクトリツリーで新規作成
+ファイル作成
+c f
+ディレクトリ作成
+c d
+
+.spacemacsファイルを開く
+Space f e d
+
+設定ファイルの反映
+Space f e R
+
+Command実行
+Space !
+
+■Clojure
+.cljファイルを開いた状態で
+REPL
+start
+Space m s i
+end
+Space m s q
+
+起動済みREPL
+Space m s c
+
+calc
+(+ 2 4)
