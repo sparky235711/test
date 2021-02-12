@@ -84,6 +84,9 @@ Space f e R
 Command実行
 Space !
 
+日本語
+Ctrl-\
+
 ■Clojure
 .cljファイルを開いた状態で
 REPL
@@ -97,3 +100,107 @@ Space m s c
 
 calc
 (+ 2 4)
+
+Ctrl-k 前回の履歴戻る
+Ctrl-j 進む
+
+変数代入
+(def x 10)
+
+関数定義
+(defn func []
+  (println "functest"))
+
+(defn func [a b c]
+  (+ a b c))
+  
+戻り値は最後の式になる。
+
+引数の数の違いで関数を分けられる
+(defn piyo
+  ([] println "one")
+  ([x] println "two")
+  ([x y] println "three"))
+
+可変引数
+(defn fuga [& args]
+  (println args))
+
+defn は関数名をつけて後から呼び出せる仕組み
+無名関数はfnで定義する
+
+((fn [a b c] (+ a b c)) 1 2 3 )
+((fn [message] (println message)) "hello world")
+
+無名変数を変数に束縛する
+(def x (fn [y] (+ y 3)))
+と
+(defn x [y] (+ y 3))
+は同じ
+
+fnマクロには簡略的な書き方ができる
+(fn [a b c] (* a b c))
+は
+#(* %1 %2 %3)
+と同じ（引数が一つの場合は%だけ）
+(filter #(even? %) [1 2 3 4])
+
+letを使うと狭い範囲の変数束縛ができる
+(let [x 3 y 4] (println x y))
+
+(def x 3)
+(def y 4)
+(println x y)
+だとx,yはコード実行後も変数束縛されている
+
+関数内で使うときなどによく使う
+(defn triangle [x y] 
+  (let [temp (* x y)] (/ temp 2)))
+
+変数を区別するためにネームスペースを使用する
+たいていの場合はファイルの１行目にnsを使ってこのファイルのネームスペースを宣言する
+(ns abc.core)
+(def cons-point [x y]
+  {:x x :y y})
+
+の場合、abc.coreのネームスペースが作成され、これ以降に続く変数、関数はabc.coreのネームスペースに所属することになる。
+
+ネームスペースを作る際に、別のネームスペースを利用する宣言も同時に可能
+(ns abc.core
+  (:require [clojure.edn :as edn]))
+clojure.ednという名前のネームスペースを ednという名前で利用できるようにしている
+clojure.ednネームスペースにはreadという関数が用意されているので:requireで上記のように指定された場合、read関数は
+edn/read で呼び出せるようになる
+
+複数のrequire可能
+(ns abc.core
+  (:require [clojure.edn :as edn] [clojure.string :as cstring]))
+
+:useを使うとネームスペース内の関数や変数を利用できるようになる
+(ns abc.core
+ (:use [clojure.edn]))
+read で使えるようになる
+
+nsを使わずにrequire use を使うときは ' をつける
+(use 'cloure.string)
+(require '[clojure.edn :as edn])
+※基本的にはuseは使わなくなったらしい Clojure1.4以降では
+
+コメント
+; ここから行末までコメント
+(comment "この中がコメント")
+(comment (println "式もコメントになるが、正しくないとエラーになる"))
+#_(list 1 2 3) ;これもコメント
+
+四則演算
+加算
+(+ 1 2)   3
+(+ 1.0 2.0 3.0) 6.0
+減算
+(-12 5)   7
+(-5 3 2)  0
+乗算
+(* 1 2 3)  6
+除算
+(/ 2 3)  2/3
+(/ 10.0 2.5)  4.0
