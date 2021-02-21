@@ -204,3 +204,127 @@ nsを使わずにrequire use を使うときは ' をつける
 除算
 (/ 2 3)  2/3
 (/ 10.0 2.5)  4.0
+
+インクリメント
+(inc 4)   5
+デクリメント
+(dec 5)   4
+最も小さい
+(min 3 4 6)   3
+最も大きい
+(max 4 5 6)   6
+
+文字列
+(str "abc" "eec")   "abceec"
+(str 1 2 3 )  "123"
+(str)  ""
+
+clojure.stringの関数を利用できるようにする
+(require '[clojure.string :as cstring])
+文字列が空かどうか
+(cstring/blank? "abcd")   false
+(cstring/blank? "")   true
+
+文字列を大文字化
+(cstring/upper-case "hello clojure")
+小文字化
+(cstring/lower-case "HELLO")
+
+文字列長さ
+(count "abcde")   5
+
+Clojureの文字列はjavaのjava.lang.Stringなので、Stringの関数を使える
+
+文字
+単一の文字は\バックスラッシュを前につける
+\A   Aという文字
+\1   1という文字
+
+キーワード
+文字列と同じような役割を持つが、同じキーワードかどうかの判断が高速に行われるので、パフォーマンスが向上するメリットがある。
+:abc   abcという名前のキーワード
+:123   123という名前のキーワード
+
+真偽値
+true
+false
+nil は Javaのnull
+
+コレクション
+リスト、マップ、ベクター、セットのこと　集まり
+
+リスト
+'(1 2 3 4) 1から4の要素を持つリスト
+(list 1 2 3 4)  上と同じ意味
+
+リストの先頭を取得
+(first '(1 2 3 4))  1
+リストの先頭を除外して残りを取得
+(rest '(1 2 3 4))    (2 3 4)
+リストの最後の要素
+(last '(1 2 3 4))  4
+リストから必要な数を取得する
+(take 3 '(1 2 3 4 5))   (1 2 3)
+カウント
+(count '(1 2 3))   3
+要素の追加 リストは前に追加される
+(conj '(1 2 3) 4)  (4 1 2 3 )
+
+ベクター（配列）
+[1 "k" 3]
+(vector 1 "k" 3)
+[]  空のベクター
+[[1 2 3] "abc"]  入れ子
+
+(get ["a" "b" "c"] 0)    "a" 
+(["a" "b" "c"] 0)  上と同じ意味
+(get ["abc" true :abc 99] 10)  nil 無効なインデックスlはnil
+
+ベクターでもリストと同じようにfirst rest last　count conjが使える。（コレクションは全て使える）
+(first ["a" "b" "c"]) "a"
+(last ["a" "b" "c"]) ("b" "c")
+(rest ["a" "b" "c"])  "c"
+(count ["a" "b" "c"]) 3
+(conj ["a" "b" "c"] "d")  ["a" "b" "c" "d"]  ベクターは最後に追加される
+
+リストはpeek と pop でスタックとして使える
+(peek '(1 2 3))  1
+(pop '(1 2 3)) (2 3)
+ 
+マップ key value を続けて記述
+{"name" "Taro" "age" 10}
+{:name "Taro" :age 10}
+(hash-map :name "Taro" :age 10)  上と同じ
+
+(get {:name "Taro" :age 20} :name)   "Taro"
+(keys {:name "Taro" :age 20} :name)   (:name :age)
+(vals {:name "Taro" :age 20} :name)   ("Taro" 20)
+
+(def person {:name "Taro" :age 20})
+(person :age)   20
+
+セット 重複のない値のコレクション
+#{:a :b :c :d}
+#{1 2 3}
+(set [1 2 3]) 上と同じ
+(hash-set 1 2 3) 上と同じ
+(set [1 2 3 3 4]) 重複削除される
+
+(def testset (set [1 2 3]))
+(get testset 3)  3
+(get testset 4)  nil  値があるかないかを判断できる
+
+遅延シーケンス
+<range>
+(range)  0から始まる1づつ増えていく無限の数
+(range 10) 0から9までのシーケンス
+(range 2 9) 2 から8までのシーケンス
+(range 0 10 2) 0から始まり10未満で2づつ増えていくシーケンス(0 2 4 6 8)
+
+<repeat>
+(repeat :a)  :aが無限に続くリスト
+(repead 4 :b) :bが4個のリスト
+
+<cycle>
+(cycle [:a :b :c])   (list :a :b ;c :a :b :c :a :b :c .....) という風に無限に続く
+
