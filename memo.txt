@@ -323,8 +323,208 @@ nil は Javaのnull
 
 <repeat>
 (repeat :a)  :aが無限に続くリスト
-(repead 4 :b) :bが4個のリスト
+(repeat 4 :b) :bが4個のリスト
 
 <cycle>
 (cycle [:a :b :c])   (list :a :b ;c :a :b :c :a :b :c .....) という風に無限に続く
 
+条件分岐
+(if 条件 真の場合の処理)
+
+(if 条件
+  真の場合の処理
+  偽の場合の処理)
+
+(if (> 3 0)
+  (println "Over zero"))
+
+処理を複数書く場合は「do」を使う
+(if (> 3 0)
+  (do
+    (println "over zero")
+    (println "x > 0")))
+
+真の時しか処理せずに複数の式がある場合はwhenを使う方が便利
+(when ( > 3 0)
+  (println "over zero")
+  (print "x <= 0")
+)
+
+(if-not (< 3 0)
+  (println "aaa")
+)
+
+<cond>
+複数の条件 最初に一致したtrueを実行:elseは無条件でtrue trueと書くよりわかりやすいから使っている
+(cond
+(< 3 0) (println "abcd")
+(< 3 5) (println "efgh")
+:else (println "ijkl")
+)
+
+例 3の倍数を返す関数
+(defn multiple-of-3? [num]
+  (cond
+  (= (mod num 3) 0) true
+  :else false))
+※最後にクエスチョンマークは関数名として利用でき真偽値を返す関数の場合に慣習として付ける傾向にある
+
+<condp>
+同じ変数を使うcondはcondpを使って簡単に書ける
+(def x 2)
+(cond
+(= x 1) (println "1")
+(= x 2) (println "2")
+(= x 3) (println "3")
+:else (println "other")
+)
+は書き直すと
+(condp = x
+1 (println "1")
+2 (println "2")
+3 (println "3")
+(println "other")
+)
+
+無名関数を利用した例
+(condp #(> %2 %1) x
+  10 (println "> 10")
+  5 (println "> 5")
+  0 (println "> 0")
+  (println "<= 0")
+)
+
+< if-let >
+ifとletを組み合わせて書く
+
+(let [user (find-by-user-id user-id)]
+  (if user
+  (println "username:" (:username user))))
+はif-letだと
+(if-let [user (find-by-user-id user-id)]
+  (println "username:" (:username user)))
+ 
+□条件式
+「=」 値が同じかどうか
+「not」値が真ならば偽 偽なら真 反転
+「not=」 =の反転
+「<」
+「>」
+「<=」
+「>=」
+「nil?」 nilか
+「zero?」0か
+「pos?」0以上か
+「vector?」ベクターか
+「list?」リストか
+「map?」 マップか
+「empty?」コレクションの要素が空か
+
+繰り返し コレクションから値を１つずつ取り出して処理する
+for
+(for [変数１ コレクション１
+     変数２ コレクション２
+     ・・・]
+     本文)
+
+(for [x [1 2 3]]
+(* x 2))
+結果：(2 4 6)
+
+九九
+(for [
+a (range 1 10)
+b (range 1 10)
+]
+(* a b))
+
+<:when>
+真だった場合だけ評価
+０から１ずつ増えるリストから偶数のものだけを１０個取り出す例
+(take 10 (for [x (range)
+ :when (even? x)] x))
+
+<doall>
+forは遅延シーケンスなので遅延させずに評価をすぐに行わせたいという場合
+例えばforの本文の中でprintlnによる出力をしたいのに遅延シーケンスであるforを使ってそれをやろうとするとすぐに表示されない
+その場合にdoallを使うことで全ての要素を評価(実行)させることができる
+(doall (for [x (range 10)] (println x)))
+
+分配束縛
+letでの変数の定義時や関数での引数では分配束縛というデータの要素を分割して束縛し、コードを分かりやすく記述できると言う仕組みがある
+
+・分配束縛を行わない場合
+(let [x [1 2 3 4 5]
+v1 (first x)
+v2 (first (rest x))
+v3 (first (rest (rest x)))]
+[v3 v2 v1])
+
+・分配束縛を使うと
+(let [x [1 2 3 4 5]
+  [v1 v2 v3] x]
+  [v3 v2 v1])
+※[v1 v2 v3] x  の部分が分配束縛
+
+・Mapの分配束縛
+(let [m {:name "Peter" :age 30}
+  {name :name age :age} m]
+  {name age})
+※{name :name age :age} m の部分が分配束縛
+
+FIZZBUZZ
+(defn in-fizz-buzz [i]
+  (condp #(= (mod %2 %1) 0) i
+    15 "FizzBuzz"
+    3 "Fizz"
+    5 "Buzz"
+  i)
+)
+
+(defn in-fizz-buzz [i]
+  (cond (= (mod i 15) 0) "FizzBuzz"
+  (= (mod i 3) 0) "Fizz"
+  (= (mod i 5) 0) "Buzz"
+  :else i
+  )
+)
+
+java呼び出し
+java
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+public class ClipboardCopy{
+  public static void copy(String text){
+    Clipboard clip = Toolkit.getDefalutToolkit().getSystemClipboard();
+    StringSelection ss = new StringSelection(text);
+    clip.setContents(ss,null;
+  }
+}
+
+これと同じことをClojureでやるには
+(import java.awt.Toolkit)
+(import java.awt.datatransfer.Clipboard)
+(import java.awt.datatransfer.StringSelection)
+(defn copy [text]
+  (let [clipboard (.getSystemClipboard (Toolkit/getDefaultToolkit))]
+  (.setContents clipboard (StringSelection. text) nil)))
+
+java:new StringSelection(text);
+clojure:(StringSelection. text)
+
+クラスメソッド (Class/method 引数 ...)
+クラスフィールド (Class/field)
+インスタンスメソッド (.method instance 引数 引数 ...)
+インスタンスフィールド (.field instance)
+
+leiningenでプロジェクト
+lein new first-project
+
+以下のファイルが作られる
+README.md　プロジェクトについての説明を記述するファイル。MarkDownで記述
+project.clj Leiningenによって利用される依存関係、プラグイン、プロジェクト名、バージョンなどプロジェクト全般の設定ファイル
+src/　ソースコードを置くディレクトリ
+src/first_project/core.clj　ネームスペースがfirst-project.coreのソースファイル。サンプルとしてfoo関数が定義されている
+test/ テスト用のコードを置くディレクトリ
+test/first_project/core_test.clj　ネームスペースがfirst-project.core-testのテスト用サンプルファイル
