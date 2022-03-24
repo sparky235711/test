@@ -528,4 +528,3 @@ src/　ソースコードを置くディレクトリ
 src/first_project/core.clj　ネームスペースがfirst-project.coreのソースファイル。サンプルとしてfoo関数が定義されている
 test/ テスト用のコードを置くディレクトリ
 test/first_project/core_test.clj　ネームスペースがfirst-project.core-testのテスト用サンプルファイル
-test
